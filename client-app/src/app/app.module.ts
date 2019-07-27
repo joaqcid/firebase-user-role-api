@@ -16,7 +16,7 @@ import { AuthTokenHttpInterceptorProvider } from './http-interceptors/auth-token
 @NgModule({
   declarations: [
     AppComponent,
-    SignInComponent
+    SignInComponent  
   ],
   imports: [
     BrowserModule,

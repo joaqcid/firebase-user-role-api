@@ -8,5 +8,6 @@ export const environment = {
     storageBucket: "joaq-lab.appspot.com",
     messagingSenderId: "794748950011",
     appId: "1:794748950011:web:815fe385e7317c11"
-  }
+  },
+  userApi: 'https://us-central1-joaq-lab.cloudfunctions.net/api'
 };

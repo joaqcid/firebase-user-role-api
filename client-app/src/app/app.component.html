@@ -6,13 +6,13 @@
        [routerLink]="['/users']"
        routerLinkActive="active">Users</a>
   </nav>
-  <a *ngIf="loggedOut$ | async" class="btn btn-outline-primary"
+  <a *ngIf="loggedOut$ | async"
+     class="btn btn-outline-primary"
      (click)="signIn()">Sign in</a>
 
-    <a *ngIf="loggedIn$ | async"
-    class="btn btn-outline-primary"
-
-       (click)="signIn()">Log out</a>
+  <a *ngIf="loggedIn$ | async"
+     class="btn btn-outline-primary"
+     (click)="signOut()">Log out</a>
 </div>
 <div class="container">
   <router-outlet></router-outlet>

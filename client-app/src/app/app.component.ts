@@ -4,7 +4,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { loggedIn } from '@angular/fire/auth-guard';
 
 @Component({
   selector: 'app-root',
@@ -35,7 +34,10 @@ export class AppComponent implements OnInit {
 
   signIn() {
     this.modal.open(SignInComponent)
+  }
 
+  signOut() {
+    this.afAuth.auth.signOut()
   }
 
 }
