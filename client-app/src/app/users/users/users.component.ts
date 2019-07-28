@@ -6,6 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserFormComponent } from '../user-form/user-form.component';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { switchMap, filter } from 'rxjs/operators';
+import { UserFormService } from '../services/user-form.service';
 
 @Component({
   selector: 'app-users',
@@ -19,6 +20,7 @@ export class UsersComponent implements OnInit {
 
   constructor(
     private userService: UserService,
+    private userForm: UserFormService,
     private modal: NgbModal,
     private afAuth: AngularFireAuth
   ) { }
@@ -32,7 +34,13 @@ export class UsersComponent implements OnInit {
     )
   }
 
-  openModal() {
+  create() {
+    this.userForm.create()
+    this.modal.open(UserFormComponent)
+  }
+
+  edit(user) {
+    this.userForm.edit(user)
     this.modal.open(UserFormComponent)
   }
 

@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SignInComponent } from './sign-in/sign-in.component';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     private modal: NgbModal,
-    private afAuth: AngularFireAuth
+    private afAuth: AngularFireAuth,
+    private router: Router
   ) {
 
   }
@@ -36,8 +38,9 @@ export class AppComponent implements OnInit {
     this.modal.open(SignInComponent)
   }
 
-  signOut() {
-    this.afAuth.auth.signOut()
+  async signOut() {
+    await this.afAuth.auth.signOut()
+    await this.router.navigateByUrl("/")
   }
 
 }
