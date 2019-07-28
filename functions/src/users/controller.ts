@@ -5,13 +5,9 @@ export async function create(req: Request, res: Response) {
     try {
         const { displayName, password, email, role } = req.body
 
-        console.info(req.body)
-
         if (!displayName || !password || !email || !role) {
             return res.status(400).send({ message: 'Missing fields' })
         }
-
-        console.info(displayName, password, email, role)
 
         const { uid } = await admin.auth().createUser({
             displayName,
@@ -62,6 +58,11 @@ export async function patch(req: Request, res: Response) {
     try {
         const { id } = req.params
         const { displayName, password, email, role } = req.body
+
+        if (!id || !displayName || !password || !email || !role) {
+            return res.status(400).send({ message: 'Missing fields' })
+        }
+
         const user = await admin.auth().updateUser(id, { displayName, password, email })
         await admin.auth().setCustomUserClaims(id, { role })
         return res.status(204).send({ user })

@@ -20,13 +20,6 @@ export class SignInComponent implements OnInit {
     private afAuth: AngularFireAuth
   ) { }
 
-  ngOnInit() {
-  }
-
-  dismiss() {
-    this.modal.dismiss()
-  }
-
   async signIn() {
     try {
       const { email, password } = this.form.value
@@ -36,6 +29,13 @@ export class SignInComponent implements OnInit {
     } catch (err) {
       console.log(err)
     }
+  }
+
+  ngOnInit() {
+  }
+
+  dismiss() {
+    this.modal.dismiss()
   }
 
 }
