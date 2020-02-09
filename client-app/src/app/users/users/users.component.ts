@@ -15,8 +15,8 @@ import { UserFormService } from '../services/user-form.service';
 })
 export class UsersComponent implements OnInit {
 
-  users$: Observable<User[]>
-  user$: Observable<User>
+  users$: Observable<User[]>;
+  user$: Observable<User>;
 
   constructor(
     private userService: UserService,
@@ -26,22 +26,38 @@ export class UsersComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.users$ = this.userService.users$
+    this.users$ = this.userService.users$;
 
     this.user$ = this.afAuth.user.pipe(
       filter(user => !!user),
       switchMap(user => this.userService.user$(user.uid))
-    )
+    );
   }
 
   create() {
-    this.userForm.create()
-    this.modal.open(UserFormComponent)
+    this.userForm.create();
+    const modalRef = this.modal.open(UserFormComponent);
+    modalRef.result.then(user => {
+      this.userService.create(user).subscribe(_ => {
+        console.log('user created');
+      });
+    }).catch(err => {
+
+    });
   }
 
-  edit(user) {
-    this.userForm.edit(user)
-    this.modal.open(UserFormComponent)
+  edit(userToEdit) {
+    this.userForm.edit(userToEdit);
+    const modalRef = this.modal.open(UserFormComponent);
+    // once user form pop up is closed, we get the value as a result
+    modalRef.result.then(user => {
+      this.userService.edit(user).subscribe(_ => {
+        console.log('user edited');
+      });
+    }).catch(err => {
+
+    });
+
   }
 
 }

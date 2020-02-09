@@ -5,6 +5,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserFormService } from '../services/user-form.service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { debug } from 'util';
 
 @Component({
   selector: 'app-user-form',
@@ -14,11 +15,12 @@ import { tap } from 'rxjs/operators';
 export class UserFormComponent implements OnInit {
 
   form = new FormGroup({
+    uid: new FormControl(''),
     email: new FormControl(''),
     displayName: new FormControl(''),
     password: new FormControl(''),
     role: new FormControl(''),
-  })
+  });
   title$: Observable<string>;
   user$: Observable<{}>;
 
@@ -29,26 +31,25 @@ export class UserFormComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.title$ = this.userForm.title$
+    this.title$ = this.userForm.title$;
     this.user$ = this.userForm.user$.pipe(
       tap(user => {
-        if (user)
-          this.form.patchValue(user)
-        else
-          this.form.reset({})
+        if (user) {
+          this.form.patchValue(user);
+        } else {
+          this.form.reset({});
+        }
       })
-    )
+    );
   }
 
   dismiss() {
-    this.modal.dismiss()
+    this.modal.dismiss('modal dismissed');
   }
 
   save() {
-    const { displayName, email, role, password } = this.form.value
-    this.userService.create({ displayName, email, role, password }).subscribe(_ => {
-      this.modal.dismiss()
-    })
+    const { displayName, email, role, password, uid } = this.form.value;
+    this.modal.close({ displayName, email, role, password, uid });
   }
 
 }
