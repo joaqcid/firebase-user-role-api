@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import * as admin from 'firebase-admin'
+import * as admin from 'firebase-admin';
 
 export async function create(req: Request, res: Response) {
     try {
@@ -25,22 +25,23 @@ export async function create(req: Request, res: Response) {
 export async function all(req: Request, res: Response) {
     try {
         const listUsers = await admin.auth().listUsers()
-        const users = listUsers.users.map(user => {
-            const customClaims = (user.customClaims || { role: '' }) as { role?: string }
-            const role = customClaims.role ? customClaims.role : ''
-            return {
-                uid: user.uid,
-                email: user.email,
-                displayName: user.displayName,
-                role,
-                lastSignInTime: user.metadata.lastSignInTime,
-                creationTime: user.metadata.creationTime
-            }
-        })
-
+        const users = listUsers.users.map(mapUser)
         return res.status(200).send({ users })
     } catch (err) {
         return handleError(res, err)
+    }
+}
+
+function mapUser(user: admin.auth.UserRecord) {
+    const customClaims = (user.customClaims || { role: '' }) as { role?: string }
+    const role = customClaims.role ? customClaims.role : ''
+    return {
+        uid: user.uid,
+        email: user.email || '',
+        displayName: user.displayName || '',
+        role,
+        lastSignInTime: user.metadata.lastSignInTime,
+        creationTime: user.metadata.creationTime
     }
 }
 
@@ -48,7 +49,8 @@ export async function get(req: Request, res: Response) {
     try {
         const { id } = req.params
         const user = await admin.auth().getUser(id)
-        return res.status(200).send({ user })
+        console.info("user", JSON.stringify(user))
+        return res.status(200).send({ user: mapUser(user) })
     } catch (err) {
         return handleError(res, err)
     }
@@ -63,9 +65,12 @@ export async function patch(req: Request, res: Response) {
             return res.status(400).send({ message: 'Missing fields' })
         }
 
-        const user = await admin.auth().updateUser(id, { displayName, password, email })
+        await admin.auth().updateUser(id, { displayName, password, email })
         await admin.auth().setCustomUserClaims(id, { role })
-        return res.status(204).send({ user })
+        const user = await admin.auth().getUser(id)
+
+        return res.status(204).send({ user: mapUser(user) })
+        
     } catch (err) {
         return handleError(res, err)
     }
