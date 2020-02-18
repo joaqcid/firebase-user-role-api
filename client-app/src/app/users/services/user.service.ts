@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 export type CreateUserRequest = { displayName: string, password: string, email: string, role: string };
-export type UpdateUserRequest = { uid: string, displayName: string, password: string, email: string, role: string };
+export type UpdateUserRequest = { uid: string } & CreateUserRequest;
 
 @Injectable({
   providedIn: 'root'
